@@ -13,15 +13,36 @@
    <!-- custom css file link  -->
    <link rel="stylesheet" href="/css/styles.css">
 <style>
-   .logo{
+   .logo .large-logo{
       width: 200px;
       height: 65px;
 
    }
+   .logo .small-logo{
+      
+      width: 112px;
+      height: 85px;
+  }
    .logo img{
       width: 100%;
       height: 100%;
    }
+   @media screen and (max-width: 1600px) {
+      .logo .large-logo {
+          display: block; /* Hide the large logo on small screens */
+      }
+      .logo .small-logo {
+          display: none; /* Show the small logo on small screens */
+      }
+  }
+  @media screen and (max-width: 600px) {
+      .logo .large-logo {
+          display: none; /* Hide the large logo on small screens */
+      }
+      .logo .small-logo {
+          display: block; /* Show the small logo on small screens */
+      }
+  }
 </style>
 </head>
 <body>
@@ -31,7 +52,8 @@
    <section class="flex">
 
       <a href="#" class="logo">
-         <img src="images/dark.png">
+         <img class="large-logo" src="./images/dark.png">
+            <img class="small-logo" src="./images/block_logo.png" alt="Small Logo">
       </a>
 
       <form action="/home" method="post" class="search-form">
