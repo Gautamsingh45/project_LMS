@@ -158,7 +158,7 @@ router.get('/login',async(req, res) => {
             return res.redirect('/login');
         }
 
-        res.render('login', { user });
+        res.render('home', { user });
     } catch (error) {
         console.error(error);
         res.redirect('/login');
@@ -298,7 +298,7 @@ router.get('/update/:id', async (req, res) => {
 
 
 router.post('/update/:id', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { firstName,lastName, email, password } = req.body;
 
     try {
         const user = await User.findById(req.params.id);
@@ -324,10 +324,11 @@ router.get('/profile', (req, res) => {
 
 // Handle profile update
 router.post('/profile', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { firstName,lastName, email, password } = req.body;
     try {
         const user = await User.findById(req.user._id);
-        user.name = name;
+        user.firstName = firstName;
+        user.lastName = lastName
         user.email = email;
         if (password) {
             user.password = password;

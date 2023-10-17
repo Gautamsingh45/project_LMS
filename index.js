@@ -17,8 +17,8 @@ app.use(session({
 }));
 
 // Database connection
-// mongoose.connect('mongodb://0.0.0.0:27017/authApp', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect("mongodb+srv://gautamsingh893591:V2jTulad1dfL6bE9@cluster0.vwrm2se.mongodb.net/student?retryWrites=true&w=majority")
+mongoose.connect('mongodb://0.0.0.0:27017/authApp', { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect("mongodb+srv://gautamsingh893591:V2jTulad1dfL6bE9@cluster0.vwrm2se.mongodb.net/student?retryWrites=true&w=majority")
 const db = mongoose.connection;
 db.once('open', () => console.log('Connected to MongoDB'));
 

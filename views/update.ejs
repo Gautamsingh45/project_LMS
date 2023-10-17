@@ -70,7 +70,7 @@
       <div class="profile">
          <img src="/images/pic-1.jpg" class="image" alt="">
          <h3 class="name"><%= user.firstName  %> <%= user.lastName %></h3>
-         <p class="role">student</p>
+         <p class="role">Student</p>
          <a href="/profile" class="btn">view profile</a>
          <div class="flex-btn">
             <a href="/logout" class="option-btn">logout</a>
@@ -93,7 +93,7 @@
       <img src="/images/pic-1.jpg" class="image" alt="User's Profile Picture">
 
       <h3 class="name"><%= user.firstName  %> <%= user.lastName %></h3>
-      <p class="role">studen</p>
+      <p class="role">Student</p>
       <a href="/profile" class="btn">view profile</a>
    </div>
 
@@ -101,9 +101,9 @@
       <a href="/home"><i class="fas fa-home"></i><span>Dashboard</span></a>
      
       <a href="/courses"><i class="fas fa-graduation-cap"></i><span>Courses</span></a>
-      <a href="/teachers"><i class="fas fa-chalkboard-user"></i><span>Mycourses</span></a>
+      <a href="/teachers"><i class="fas fa-chalkboard-user"></i><span>My Courses</span></a>
       <a href="/about"><i class="fas fa-question"></i><span>Assignment</span></a>
-      <a href="/contact"><i class="fas fa-headset"></i><span>contact us</span></a>
+      <a href="/contact"><i class="fas fa-headset"></i><span>Contact Us</span></a>
    </nav>
 
 </div>
@@ -121,8 +121,10 @@
       <input type="password" name="new_pass" placeholder="enter your old password" maxlength="20" class="box"> -->
        <p>Email</p>
       <input type="email" id="email" name="email" value="<%= user.email %>" maxlength="20" class="box" readonly>
+      <p>Change Phone Number</p>
+      <input type="tel" id="number" name="number" placeholder="123-45-678" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" required maxlength="50" class="box">
       <p>Change Password</p>
-      <input type="password" id="password" name="password"  maxlength="50" class="box">
+      <input type="password" id="password" name="password"   maxlength="50" class="box">
       <!-- <p>update pic</p>
       <input type="file" accept="image/*" class="box"> -->
       <input type="submit" value="update profile" name="submit" class="btn">
