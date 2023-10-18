@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-
-router.get('/', (req, res) => {
+const loginMiddleware = require('../middleware/login');
+router.get('/', async(req, res) => {
     res.render('register');
+    
 });
 
 router.post('/register', async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, role, email, password } = req.body;
 
     try {
         // Check if the email already exists
@@ -20,7 +21,7 @@ router.post('/register', async (req, res) => {
 
         // If the email is unique, proceed with registration
         const token = Math.random().toString(36).substr(2) + Date.now().toString(36);
-        const user = new User({ firstName, lastName, email, password, token });
+        const user = new User({ firstName, lastName,role, email, password, token });
         await user.save();
         res.render('register');
     } catch (error) {
@@ -36,22 +37,37 @@ router.get('/', (req, res) => {
 
 
 
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+// router.post('/login', async (req, res) => {
+//     const { email, password } = req.body;
 
-    try {
-        const user = await User.findOne({ email, password });
-        if (user) {
-            req.session.userId = user._id; // Store user ID in session
-            res.redirect('/home');
-        } else {
-            res.redirect('/login');
-        }
-    } catch (error) {
-        console.error(error);
-        res.redirect('/login');
+//     try {
+//         const user = await User.findOne({ email, password });
+//         if (user) {
+//             req.session.userId = user._id; // Store user ID in session
+//             res.redirect('/home');
+//         } else {
+//             res.redirect('/login');
+//         }
+//     } catch (error) {
+//         console.error(error);
+//         res.redirect('/login');
+//     }
+// });
+
+router.post('/login', loginMiddleware, (req, res) => {
+    const { role, userId} = req.session;
+    // const {user} = req.session;
+    if (role === 'Admin') {
+    //   return res.render('login');
+    res.redirect('/admin');
+    res.redirect('/admin');
+    } else if (role === 'Student') {
+    //   return res.render('home',{ userId });
+          res.redirect('/home');
+    } else {
+      res.send('Invalid role');
     }
-});
+  });
 
 
 router.get('/logout', (req, res) => {
@@ -61,7 +77,7 @@ router.get('/logout', (req, res) => {
 router.get('/home', async (req, res) => {
     
     try {
-        const userId = req.session.userId;
+        const { userId} = req.session;
 
         if (!userId) {
             return res.redirect('/login');
@@ -78,6 +94,28 @@ router.get('/home', async (req, res) => {
         console.error(error);
         res.redirect('/login');
     }
+});
+
+router.get('/admin', async (req, res) => {
+    
+    // try {
+        // const { userId} = req.session;
+
+        // if (!userId) {
+        //     return res.redirect('/login');
+        // }
+
+        // const user = await User.findById(userId);
+
+        // if (!user) {
+        //     return res.redirect('/login');
+        // }
+
+        res.render('admin');
+    // } catch (error) {
+    //     console.error(error);
+    //     res.redirect('/login');
+    // }
 });
 
 router.get('/about',async(req, res) => {
@@ -104,7 +142,7 @@ router.get('/about',async(req, res) => {
 router.get('/contact', async(req, res) => {
     
     try {
-        const userId = req.session.userId;
+        const userId = req.session.role;
 
         if (!userId) {
             return res.redirect('/login');

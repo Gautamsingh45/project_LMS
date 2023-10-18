@@ -118,6 +118,16 @@ body{
     width: 100%;
     outline: none;
 }
+.container .input{
+    background-color: #eee;
+    border: none;
+    margin: 8px 0;
+    padding: 10px 15px;
+    font-size: 13px;
+    border-radius: 8px;
+    width: 100%;
+    outline: none;
+}
 
 .form-container{
     position: absolute;
@@ -259,6 +269,11 @@ body{
                 <span>or use your email for registeration</span>
                 <input type="name"  name="firstName" placeholder="First Name" required>
                 <input type="name"  name="lastName" placeholder="Last Name" required>
+                <select class="input" name="role" id="role">
+                    <option value="None">None</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Student">Student</option>
+                  </select>
                 <input type="email" id="email" name="email" placeholder="Email" required>
                 <input type="password" id="password" name="password" placeholder="Password" required>
                 <button>Sign Up</button>
