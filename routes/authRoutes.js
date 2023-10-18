@@ -1,19 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
+
 const loginMiddleware = require('../middleware/login');
+const nodemailer = require('nodemailer');
+const { v4: uuidv4 } = require('uuid');
 router.get('/', async(req, res) => {
     res.render('register');
     
 });
 
 router.post('/register', async (req, res) => {
-    const { firstName, lastName, role, email, password } = req.body;
+    const { firstName, lastName, role, email, password  } = req.body;
 
     try {
         // Check if the email already exists
         const existingUser = await User.findOne({ email });
-
+        const confirmationCode = generateConfirmationCode();//change 1
         if (existingUser) {
             // Email already registered, handle this case
             return res.send('Email already registered, handle this case'); // Redirect to registration page with an error message
@@ -21,16 +24,64 @@ router.post('/register', async (req, res) => {
 
         // If the email is unique, proceed with registration
         const token = Math.random().toString(36).substr(2) + Date.now().toString(36);
-        const user = new User({ firstName, lastName,role, email, password, token });
+        const user = new User({ firstName, lastName,role, email, password, token , confirmationCode,
+            isConfirmed: false });
         await user.save();
-        res.render('register');
+
+        sendConfirmationEmail(email, confirmationCode);//change 1
+        res.render('confirmation', { email }); 
     } catch (error) {
         console.error(error);
         res.redirect('/register');
     }
 });
+function generateConfirmationCode() {
+    return uuidv4().toString().replace(/-/g, ''); // Generate a random confirmation code using UUID
+  }
+  
+  function sendConfirmationEmail(email, confirmationCode) {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'gautamsingh893591@gmail.com',
+        pass: 'tcdencsoubsnhymc'
+      }
+    });
+  
+    const mailOptions = {
+      from: 'your-email@gmail.com',
+      to: email,
+      subject: 'Confirmation Email',
+      text: `Your confirmation code is: ${confirmationCode}`
+    };
+  
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+  }
 
-
+  router.post('/confirmation', async (req, res) => {
+    const { verificationCode } = req.body;
+  
+    try {
+      const user = await User.findOne({ confirmationCode: verificationCode });
+  
+      if (user) {
+        user.isConfirmed = true;
+        await user.save();
+        res.redirect('/'); // Redirect to login after successful confirmation
+      } else {
+        return res.status(404).send('User not found or invalid verification code.');
+      }
+    } catch (err) {
+      console.error(err);
+      return res.status(500).send('Internal Server Error');
+    }
+  });
 router.get('/', (req, res) => {
     res.render('register');
 });
@@ -98,24 +149,25 @@ router.get('/home', async (req, res) => {
 
 router.get('/admin', async (req, res) => {
     
-    // try {
-        // const { userId} = req.session;
+    try {
+        const { userId} = req.session;
 
-        // if (!userId) {
-        //     return res.redirect('/login');
-        // }
+        if (!userId) {
+            return res.redirect('/login');
+        }
 
-        // const user = await User.findById(userId);
+        const user = await User.findById(userId);
 
-        // if (!user) {
-        //     return res.redirect('/login');
-        // }
-
-        res.render('admin');
-    // } catch (error) {
-    //     console.error(error);
-    //     res.redirect('/login');
-    // }
+        if (!user) {
+            // return res.redirect('/login');
+            res.render('admin');
+        }
+        res.render('admin', { user });
+        // res.render('admin');
+    } catch (error) {
+        console.error(error);
+        res.redirect('/login');
+    }
 });
 
 router.get('/about',async(req, res) => {
