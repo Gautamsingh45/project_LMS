@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WhatsApp Click to Chat</title>
     <!-- <link rel="stylesheet" href="./style.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+  
     <style>
         .whatsapp-button {
             position: fixed;
@@ -14,33 +16,40 @@
             right: 40px;
             z-index: 9999;
         }
-
+        
         #whatsappButton {
-            background-color:#32CD32;
-            border: none;
-            border-radius: 30px;
-            padding: 10px;
-            text-decoration: none;
-            transition: background-color 0.3s;
-            cursor: pointer;
+            border-radius: 45px;
+            background-color: transparent; /* Set background color to transparent */
+            padding: 0; /* Remove padding */
         }
-
-        #whatsappButton:hover {
-            background-color: #f9fafa;
+        
+        #whatsappButton i {
+            border-radius: 45px;
+            font-size: 50px;
+            color: green; /* Set icon color */
         }
-
-        img {
-            width: 45px;
-            height: 40px;
-            border-radius: 50%;
+        
+        #whatsappButton i:hover {
+            color: white; /* Change icon color on hover */
+            /* Change background color on hover */ 
         }
     </style>
+    
+    
+        
+   
 </head>
 <body>
-    <div class="whatsapp-button">
+    <!-- <div class="whatsapp-button">
         <button id="whatsappButton">
-            <img src="/images/www.webp" alt="WhatsApp">
+        
+            <i  class="fa-brands fa-whatsapp"></i>
         </button>
+    </div> -->
+    <div class="whatsapp-button" id="whatsappButton">
+        
+            <i  class="fa-brands fa-whatsapp"></i>
+        
     </div>
 
     <script>

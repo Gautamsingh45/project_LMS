@@ -29,15 +29,17 @@ router.post('/register', async (req, res) => {
         await user.save();
 
         sendConfirmationEmail(email, confirmationCode);//change 1
-        res.render('confirmation', { email }); 
+        // res.render('register', { email }); 
     } catch (error) {
         console.error(error);
         res.redirect('/register');
     }
 });
 function generateConfirmationCode() {
-    return uuidv4().toString().replace(/-/g, ''); // Generate a random confirmation code using UUID
-  }
+    // return uuidv4().toString().replace(/-/g, ''); // Generate a random confirmation code using UUID
+    const code = Math.floor(100000 + Math.random() * 900000); // Generates a 6-digit random number
+    return code.toString();  
+}
   
   function sendConfirmationEmail(email, confirmationCode) {
     const transporter = nodemailer.createTransport({
@@ -106,17 +108,28 @@ router.get('/', (req, res) => {
 // });
 
 router.post('/login', loginMiddleware, (req, res) => {
-    const { role, userId} = req.session;
+    const { role, userId, isConfirmed} = req.session;
     // const {user} = req.session;
-    if (role === 'Admin') {
-    //   return res.render('login');
-    res.redirect('/admin');
-    res.redirect('/admin');
-    } else if (role === 'Student') {
-    //   return res.render('home',{ userId });
-          res.redirect('/home');
+    // if (role === 'Admin' && isConfirmed== 'true' ) {
+    // //   return res.render('login');
+    // res.redirect('/admin');
+    // res.redirect('/admin');
+    // } else if (role === 'Student' && isConfirmed== 'true') {
+    // //   return res.render('home',{ userId });
+    //       res.redirect('/home');
+    // } else {
+    //   res.send('Invalid role');
+    // }
+    if (isConfirmed) {
+        if (role === 'Admin') {
+            res.redirect('/admin');
+        } else if (role === 'Student') {
+            res.redirect('/home');
+        } else {
+            res.send('Invalid role');
+        }
     } else {
-      res.send('Invalid role');
+        res.send('Email not confirmed. Please confirm your email before logging in.');
     }
   });
 

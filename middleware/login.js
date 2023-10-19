@@ -1,21 +1,37 @@
 const User = require('../models/User');
 
 const loginMiddleware = async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password,isConfirmed } = req.body;
 
   try {
-    const user = await User.findOne({ email, password });
+    const user = await User.findOne({ email, password});
 
-    if (user) {
+  //   if (user) {
+  //     req.session.isConfirmed = user.isConfirmed;
+  //     req.session.role = user.role;
+  //    req.session.userId = user._id;
+  //     next();
+  //   } else {
+  //     res.send('Invalid credentials');
+  //   }
+  // } catch (error) {
+  //   res.status(500).send('Error during login');
+  // }
+  if (user) {
+    if (user.isConfirmed) {
+      req.session.isConfirmed = user.isConfirmed;
       req.session.role = user.role;
-     req.session.userId = user._id;
+      req.session.userId = user._id;
       next();
     } else {
-      res.send('Invalid credentials');
+      res.send('Email not confirmed. Please confirm your email before logging in.');
     }
-  } catch (error) {
-    res.status(500).send('Error during login');
+  } else {
+    res.send('Invalid credentials');
   }
+} catch (error) {
+  res.status(500).send('Error during login');
+}
 };
 // router.post('/login',loginMiddleware, async (req, res) => {
     //     const { email, password } = req.body;

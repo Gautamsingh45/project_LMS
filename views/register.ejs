@@ -29,7 +29,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <title>Modern Login Page | AsmrProg</title>
+    <title>Blockcept.ai</title>
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
@@ -251,6 +251,69 @@ body{
 .container.active .toggle-right{
     transform: translateX(200%);
 }
+
+
+
+
+
+
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 400px;
+    width: 80%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+}
+
+.popup-content {
+    padding: 20px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
     </style>
 </head>
 
@@ -258,33 +321,33 @@ body{
 
     <div class="container" id="container">
         <div class="form-container sign-up">
-            <form action="/register" method="post">
-                <h1>Create Account</h1>
-                <div class="social-icons">
+            <form action="/register" method="post" id="signupForm">
+                <h1>Create Account</h1><br>
+                <!-- <div class="social-icons">
                     <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
                     <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
                     <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
                     <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your email for registeration</span>
+                </div> -->
+                <span>or use your email for registeration</span><br>
                 <input type="name"  name="firstName" placeholder="First Name" required>
                 <input type="name"  name="lastName" placeholder="Last Name" required>
                  <input type="hidden" name="role" id="role" value="Student">
                 <input type="email" id="email" name="email" placeholder="Email" required>
                 <input type="password" id="password" name="password" placeholder="Password" required>
-                <button>Sign Up</button>
+                <button onclick="openPopup()">Sign Up</button>
             </form>
         </div>
         <div class="form-container sign-in">
             <form action="/login" method="post">
-                <h1>Sign In</h1>
-                <div class="social-icons">
+                <h1>Sign In</h1><br>
+                <!-- <div class="social-icons">
                     <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
                     <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
                     <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
                     <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your email password</span>
+                </div> -->
+                <span>or use your email password</span><br>
                 <input type="email" id="email" name="email" placeholder="Email ">
                 <input type="password" id="password" name="password" placeholder="Password">
                 <a href="#">Forget Your Password?</a>
@@ -306,7 +369,46 @@ body{
             </div>
         </div>
     </div>
+<!-- change email -->
+<div class="popup" id="popup">
+    <div class="popup-content">
+        <span class="close-btn" onclick="closePopup()">X</span>
+        <h2>Confirmation Email</h2>
+        <form action="/confirmation" method="post">
+            <label for="verificationCode">Verification Code:</label>
+            <input type="text" id="verificationCode" name="verificationCode" required>
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+</div>
 
+<script>
+    
+
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+    }
+
+
+    
+
+    function openPopup() {
+        // Assuming that you have a form with id "signupForm"
+        const signupForm = document.getElementById('signupForm');
+      
+        // Check if the form is valid
+        if (signupForm.checkValidity()) {
+          // If the form is valid, display the popup
+          document.getElementById("popup").style.display = "block";
+        } else {
+          // If the form is not valid, alert the user or handle it in some way
+          alert("Please fill out all required fields before signing up.");
+        }
+      }
+      
+</script>
+<!-- end -->
     <script src="script.js"></script>
 </body>
 <script>
@@ -322,5 +424,6 @@ loginBtn.addEventListener('click', () => {
     container.classList.remove("active");
 });
 </script>
+
 
 </html>
